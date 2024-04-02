@@ -11,6 +11,7 @@
   "dependencies": {
     "@kinde-oss/react-native-sdk-0-7x": "^1.2.2",
     "@react-native-async-storage/async-storage": "1.21.0",
+    "@supabase/supabase-js": "^2.41.1",
     "@types/react": "~18.2.45",
     "expo": "~50.0.14",
     "expo-constants": "~15.4.5",
