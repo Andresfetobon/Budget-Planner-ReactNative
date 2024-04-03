@@ -4,15 +4,16 @@ import React from 'react';
 import Colors from '../../utils/Colors';
 import { client } from '../../utils/KindeConfig';
 import services from '../../utils/services';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 
 export default function loginScreen() {
-
+  const route = useRouter();
+  
   const handleSignIn = async () => {
     const token = await client.login();
     if (token) {
       await services.storeData('login', 'true');
-      router.replace('/');
+      route.replace('/');
     }
   };
 

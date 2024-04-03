@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, Button } from 'react-native';
 import React, { useEffect } from 'react';
-import service from '../../utils/services';
-import { router, useRouter } from 'expo-router';
+import { Link, router, useRouter } from 'expo-router';
 import { client } from '../../utils/KindeConfig';
 import services from '../../utils/services';
 import { supabase } from '../../utils/SupaBaseConfig';
-
+import Header from '../../components/Header';
+import Colors from '../../utils/Colors';
+import CircurlChart from '../../components/CircurlChart';
+import { Ionicons } from '@expo/vector-icons';
 export default function home() {
   const router = useRouter();
 
@@ -15,7 +17,7 @@ export default function home() {
   }, []);
 
   const checkUserAuth = async () => {
-    const result = await service.getData('login');
+    const result = await services.getData('login');
     if (result !== 'true') {
       router.replace('/login');
     }
@@ -42,11 +44,25 @@ export default function home() {
   return (
     <View
       style={{
-        marginTop: 20,
+        marginTop: 40,
+        flex: 1,
       }}
     >
-      <Text style={styles.text}>home Screen</Text>
-      <Button title='logged out' onPress={handleLogout} />
+      <View
+        style={{
+          padding: 20,
+          backgroundColor: Colors.PRIMARY,
+          height: 150,
+        }}
+      >
+        {/* <Text style={styles.text}>home Screen</Text>
+      <Button title='logout' onPress={handleLogout} /> */}
+        <Header />
+        <CircurlChart />
+      </View>
+      <Link href={'/add-new-category'} style={styles.adBtnContainer}>
+        <Ionicons name='add-circle' size={67} color={Colors.PRIMARY} />
+      </Link>
     </View>
   );
 }
@@ -55,5 +71,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginTop: 25,
+  },
+  adBtnContainer: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16
   },
 });
