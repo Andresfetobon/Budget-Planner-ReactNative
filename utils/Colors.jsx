@@ -8,4 +8,5 @@ export default {
   PURPLE: '#9F3CFE',
   RED: '#FF555D',
   ORANGE: '#FF7D4F',
+  COLORS_LIST: ['#9F3CFE', '#FF555D', '#FF7D4F', '#4F75FE', '#13C38B']
 };

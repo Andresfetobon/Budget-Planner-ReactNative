@@ -32,6 +32,7 @@ export default function CircurlChart() {
             alignItems: 'center',
           }}
         >
+          
           <MaterialCommunityIcons
             name='checkbox-blank-circle'
             size={24}
