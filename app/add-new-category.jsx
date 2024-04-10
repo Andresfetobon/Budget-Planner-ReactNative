@@ -14,6 +14,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../utils/SupaBaseConfig';
 import { client } from '../utils/KindeConfig';
 import { useRouter } from 'expo-router';
+
 export default function addNewCategory() {
   const [selectedIcon, setSelectedIcon] = useState('🏖️');
   const [selectedColor, setSelectedColor] = useState(Colors.GREEN);
@@ -39,9 +40,9 @@ export default function addNewCategory() {
     if (data) {
       router.replace({
         pathname: '/category-details',
-        params:{
-          categoryId:data[0].id
-        }
+        params: {
+          categoryId: data[0].id,
+        },
       });
       ToastAndroid.show('Category Created!', ToastAndroid.SHORT);
     }

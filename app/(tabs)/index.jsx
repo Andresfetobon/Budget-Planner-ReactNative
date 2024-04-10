@@ -35,7 +35,6 @@ export default function home() {
       .select('*, CategoryItems(*)')
       .eq('created_by', user.email);
 
-    console.log('Data', data);
     setCategoryDataList(data);
     data&&setLoading(false)
   };
