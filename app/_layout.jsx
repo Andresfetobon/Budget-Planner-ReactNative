@@ -27,7 +27,9 @@ export default function HomeLayout() {
       <Stack.Screen 
       name='add-new-category-item'
       options={{
-        presentation: 'modal'
+        presentation: 'modal',
+        headerShown: true,
+        headerTitle: 'Add New Item'
       }}
       />
     </Stack>

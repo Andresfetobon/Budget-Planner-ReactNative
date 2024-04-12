@@ -48,7 +48,7 @@ export default function Header() {
           <Text
             style={{
               color: Colors.WHITE,
-              fontFamily: 'utfit-bold',
+              fontFamily: 'outfit-bold',
               fontSize: 20,
             }}
           >
