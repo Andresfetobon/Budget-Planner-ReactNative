@@ -7,20 +7,23 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 import React, { useState } from 'react';
 import Colors from '../utils/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { decode } from 'base64-arraybuffer'
-import { supabase } from '../utils/SupaBaseConfig'
+import { decode } from 'base64-arraybuffer';
+import { supabase } from '../utils/SupaBaseConfig';
+import { useLocalSearchParams } from 'expo-router';
 const placeholder =
   'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png';
 
 export default function addNewCategoryItem() {
   const [image, setImage] = useState(placeholder);
   const [previewImage, setPreviewImage] = useState(placeholder);
+  const { categoryId } = useLocalSearchParams();
   const [name, setName] = useState();
   const [url, setUrl] = useState();
   const [cost, setCost] = useState();
@@ -42,16 +45,35 @@ export default function addNewCategoryItem() {
 
   const onClickAdd = async () => {
     const filName = Date.now();
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabase
+      .storage
       .from('images')
       .upload(filName + '.png', decode(image), {
         contentType: 'image/png',
       });
-      if(data){
-        const fileUrl = 'https://iekizkkusjfsusgezwyq.supabase.co/storage/v1/object/public/images/' + data.path;
-        console.log(fileUrl)
-      }
+    if (data) {
+      const fileUrl =
+        'https://iekizkkusjfsusgezwyq.supabase.co/storage/v1/object/public/images/' +
+        filName +
+        '.png';
+      console.log(fileUrl);
 
+      const { data, error } = await supabase
+        .from('CategoryItems')
+        .insert([
+          {
+            name: name,
+            cost: cost,
+            url: url,
+            image: fileUrl,
+            note: note,
+            category_id: categoryId,
+          },
+        ])
+        .select();
+      ToastAndroid.show('New Item Added!!!', ToastAndroid.SHORT);
+      console.log(data);
+    }
   };
 
   return (
@@ -94,9 +116,11 @@ export default function addNewCategoryItem() {
             numberOfLines={3}
           />
         </View>
-        <TouchableOpacity 
-        onPress={() => onClickAdd()}
-        disabled={!name || !cost} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => onClickAdd()}
+          disabled={!name || !cost}
+          style={styles.button}
+        >
           <Text
             style={{
               textAlign: 'center',
