@@ -1,12 +1,14 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../../utils/Colors';
+import {supabase} from '../../utils/SupaBaseConfig'
+import { router, useRouter } from 'expo-router';
 
 export default function InformationItems({ categoryData }) {
   const [totalCost, setTotalCost] = useState();
   const [totalPorcen, setTotalPorcen] = useState(0);
-
+  const router =  useRouter()
   useEffect(() => {
     categoryData && calculateTotalPerc();
   }, [categoryData]);
@@ -16,11 +18,39 @@ export default function InformationItems({ categoryData }) {
       totalPercentage = totalPercentage + item.cost;
     });
     setTotalCost(totalPercentage);
-    const perc = (totalPercentage / categoryData.assigned_budget) * 100;
+    let perc = (totalPercentage / categoryData.assigned_budget) * 100;
+    if (perc > 100) {
+      perc = 100;
+    }
     setTotalPorcen(perc);
     console.log(perc);
   };
-
+  const deleteCategory = () => {
+    Alert.alert('Are you sure?', 'you really want to delete it', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          const { error } = await supabase
+            .from('Category')
+            .delete()
+            .eq('category_id', categoryData.id);
+          
+            await supabase
+            .from('Category') 
+            .delete()
+            .eq('id', categoryData.id)
+            ToastAndroid.show('Category Deleted!', ToastAndroid.SHORT)
+            router.replace('/(tabs)')
+        },
+        //delete the category here
+      },
+    ]);
+  };
   return (
     <View>
       <View style={styles.container}>
@@ -38,7 +68,9 @@ export default function InformationItems({ categoryData }) {
             {categoryData?.CategoryItems?.length} Item
           </Text>
         </View>
-        <Ionicons name='trash' size={24} color='red' />
+        <TouchableOpacity onPress={() => deleteCategory()}>
+          <Ionicons name='trash' size={24} color='red' />
+        </TouchableOpacity>
       </View>
       {/* Progress bar */}
       <View style={styles.amountContainer}>

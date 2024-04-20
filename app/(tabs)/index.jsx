@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Button, ScrollView, RefreshControl } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Link, router, useRouter } from 'expo-router';
 import { client } from '../../utils/KindeConfig';
@@ -13,7 +20,7 @@ import CategoryList from '../../components/CategoryList';
 export default function home() {
   const router = useRouter();
   const [categoryDataList, setCategoryDataList] = useState();
-  const [loading, setLoading ] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     checkUserAuth();
@@ -28,15 +35,15 @@ export default function home() {
   };
 
   const getCategoryList = async () => {
-    setLoading(true)
+    setLoading(true);
     const user = await client.getUserDetails();
     const { data, error } = await supabase
       .from('Category')
-      .select('*, CategoryItems(*)')
+      .select('*,CategoryItems(*)')
       .eq('created_by', user.email);
 
     setCategoryDataList(data);
-    data&&setLoading(false)
+    data && setLoading(false);
   };
 
   return (

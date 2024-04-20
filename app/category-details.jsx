@@ -26,7 +26,7 @@ export default function categoryDetails() {
   };
 
   return (
-    <View style={{ padding: 20, marginTop: 20, flex: 1 }}>
+    <View style={{ padding: 20, marginTop: 20, flex: 1, backgroundColor: Colors.WHITE }}>
       <TouchableOpacity
         onPress={() => {
           router.back();

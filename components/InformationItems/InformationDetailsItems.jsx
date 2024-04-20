@@ -47,12 +47,13 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 15,
+    marginTop: 15
   },
   containerArticles: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'cente9',
+    alignItems: 'center',
   },
   name: {
     fontSize: 20,

@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useState } from 'react';
 import Colors from '../utils/Colors';
@@ -16,7 +17,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { decode } from 'base64-arraybuffer';
 import { supabase } from '../utils/SupaBaseConfig';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 const placeholder =
   'https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png';
 
@@ -28,6 +29,8 @@ export default function addNewCategoryItem() {
   const [url, setUrl] = useState();
   const [cost, setCost] = useState();
   const [note, setNote] = useState();
+  const [loading, setLoading] = useState(false)
+  const router = useRouter();
 
   const onImagePick = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -44,6 +47,7 @@ export default function addNewCategoryItem() {
   };
 
   const onClickAdd = async () => {
+    setLoading(true)
     const filName = Date.now();
     const { data, error } = await supabase
       .storage
@@ -56,7 +60,6 @@ export default function addNewCategoryItem() {
         'https://iekizkkusjfsusgezwyq.supabase.co/storage/v1/object/public/images/' +
         filName +
         '.png';
-      console.log(fileUrl);
 
       const { data, error } = await supabase
         .from('CategoryItems')
@@ -73,15 +76,23 @@ export default function addNewCategoryItem() {
         .select();
       ToastAndroid.show('New Item Added!!!', ToastAndroid.SHORT);
       console.log(data);
+      router.replace({
+        pathname: '/category-details',
+        params: {
+          categoryId: categoryId,
+        },
+      });
+      setLoading(false)
     }
   };
 
   return (
     <KeyboardAvoidingView>
-      <ScrollView style={{ padding: 20 }}>
+      <ScrollView style={{ padding: 20, backgroundColor: Colors.WHITE }}>
         <TouchableOpacity onPress={() => onImagePick()}>
           <Image source={{ uri: previewImage }} style={styles.imageContainer} />
         </TouchableOpacity>
+        
         <View style={styles.textInputContainer}>
           <Ionicons name='pricetag' size={24} color={Colors.GRAY} />
           <TextInput
@@ -118,9 +129,13 @@ export default function addNewCategoryItem() {
         </View>
         <TouchableOpacity
           onPress={() => onClickAdd()}
-          disabled={!name || !cost}
+          disabled={!name || !cost || loading}
           style={styles.button}
         >
+          {
+            loading ?
+            <ActivityIndicator color={Colors.WHITE} />
+            :
           <Text
             style={{
               textAlign: 'center',
@@ -131,6 +146,7 @@ export default function addNewCategoryItem() {
           >
             Add
           </Text>
+          }
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
