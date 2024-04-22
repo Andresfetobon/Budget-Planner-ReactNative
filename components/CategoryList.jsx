@@ -1,9 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../utils/Colors';
 import { useRouter } from 'expo-router';
 
@@ -11,14 +6,23 @@ import React from 'react';
 
 export default function CategoryList({ categoryDataList }) {
   const router = useRouter();
-  const onCategoryClick = (category) => {
+  const onCategoryClick = category => {
     router.push({
-      pathname:'/category-details',
-      params:{
-        categoryId:category.id
-      }
-    })
-  }
+      pathname: '/category-details',
+      params: {
+        categoryId: category.id,
+      },
+    });
+  };
+
+  const calcualteTotalCost = categoryItems => {
+    let totalCost = 0;
+    categoryItems.forEach(item => {
+      totalCost = totalCost + item.cost;
+    });
+
+    return totalCost
+  };
   return (
     <View style={{ marginTop: 20 }}>
       <Text
@@ -47,7 +51,9 @@ export default function CategoryList({ categoryDataList }) {
                   {category.CategoryItems.length} Items
                 </Text>
               </View>
-              <Text style={styles.totalAmountText}>${category.assigned_budget}</Text>
+              <Text style={styles.totalAmountText}>
+                ${calcualteTotalCost(category.CategoryItems)}
+              </Text>
             </View>
           </TouchableOpacity>
         ))}

@@ -71,7 +71,7 @@ export default function home() {
           <Header />
         </View>
         <View style={{ padding: 20, marginTop: -75 }}>
-          <CircurlChart />
+          <CircurlChart categoryDataList={categoryDataList}/>
           <CategoryList categoryDataList={categoryDataList} />
         </View>
       </ScrollView>
