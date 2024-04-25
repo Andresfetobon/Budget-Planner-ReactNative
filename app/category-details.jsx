@@ -40,7 +40,7 @@ export default function categoryDetails() {
         />
       </TouchableOpacity>
       <InformationItems categoryData={categoryData} />
-      <InformationDetailsItems categoryData={categoryData} />
+      <InformationDetailsItems  setUpdateRecord={() => getCategoryDetail()} categoryData={categoryData} />
 
       <Link
       href={{
